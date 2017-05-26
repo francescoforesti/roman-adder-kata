@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * An adder of numbers expressed in roman notation :
@@ -11,23 +10,30 @@ import java.util.TreeMap;
 
 public class RomanNumbersAdder {
 
-    private final TreeMap<Integer, String> conversionMap = new TreeMap<>();
+    private static Map<Integer,String> symbolFlyweight;
+    private final TreeMap<Integer, String> conversionTable = new TreeMap<>();
+
+    static {
+        HashMap<Integer,String> initialMap = new HashMap<>();
+        initialMap.put(1000, "M");
+        initialMap.put(900, "CM");
+        initialMap.put(500, "D");
+        initialMap.put(400, "CD");
+        initialMap.put(100, "C");
+        initialMap.put(90, "XC");
+        initialMap.put(50, "L");
+        initialMap.put(40, "XL");
+        initialMap.put(10, "X");
+        initialMap.put(9, "IX");
+        initialMap.put(5, "V");
+        initialMap.put(4, "IV");
+        initialMap.put(1, "I");
+        initialMap.put(0, "");
+        symbolFlyweight = Collections.unmodifiableMap(initialMap);
+    }
 
     public RomanNumbersAdder() {
-        conversionMap.put(1000, "M");
-        conversionMap.put(900, "CM");
-        conversionMap.put(500, "D");
-        conversionMap.put(400, "CD");
-        conversionMap.put(100, "C");
-        conversionMap.put(90, "XC");
-        conversionMap.put(50, "L");
-        conversionMap.put(40, "XL");
-        conversionMap.put(10, "X");
-        conversionMap.put(9, "IX");
-        conversionMap.put(5, "V");
-        conversionMap.put(4, "IV");
-        conversionMap.put(1, "I");
-        conversionMap.put(0, "");
+        conversionTable.putAll(symbolFlyweight);
     }
 
     public  String sum(List<String> items) {
@@ -36,11 +42,11 @@ public class RomanNumbersAdder {
     }
 
     String toRoman(int number) {
-        int l =  conversionMap.floorKey(number);
+        int l =  conversionTable.floorKey(number);
         if ( number == l ) {
-            return conversionMap.get(number);
+            return conversionTable.get(number);
         }
-        return conversionMap.get(l) + toRoman(number-l);
+        return conversionTable.get(l) + toRoman(number-l);
     }
 
     Integer toDecimal(String romanNumber) {
